@@ -12,8 +12,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import com.shopify.model.adapters.EscapedStringAdapter;
 import com.shopify.model.adapters.EscapedStringsAdapter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Option {
 
 	private String id;
@@ -65,4 +68,14 @@ public class Option {
 		this.values = values;
 	}
 
+	@Override
+	public String toString() {
+		return "Option{" +
+				"id='" + id + '\'' +
+				", productId='" + productId + '\'' +
+				", name='" + name + '\'' +
+				", position=" + position +
+				", values=" + values +
+				'}';
+	}
 }

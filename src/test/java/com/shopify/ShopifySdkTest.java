@@ -992,17 +992,25 @@ public class ShopifySdkTest {
 		final BigDecimal somePrice = BigDecimal.valueOf(42.11);
 		final ShopifyVariantCreationRequest shopifyVariantCreationRequest = ShopifyVariantCreationRequest.newBuilder()
 				.withPrice(somePrice).withCompareAtPrice(somePrice).withSku("ABC-123").withBarcode("XYZ-123")
-				.withWeight(somePrice).withAvailable(13).withFirstOption("Shoes").withSecondOption("Red")
+				.withWeightGrams(somePrice).withAvailable(13).withFirstOption("Shoes").withSecondOption("Red")
 				.withThirdOption("Green").withImageSource("http://channelape.com/1.png")
 				.withDefaultInventoryManagement().withDefaultInventoryPolicy().withDefaultFulfillmentService()
-				.withRequiresShipping(true).withTaxable(true).build();
+				.withRequiresShipping(true).withTitle("TITLE VARIANT").withTaxable(true)
+				.withDefaultInventoryPresentment("10", "25")
+				.noProductId()
+				.noId()
+				.build();
 		final ShopifyProductCreationRequest shopifyProductCreationRequest = ShopifyProductCreationRequest.newBuilder()
 				.withTitle("Some Product Title").withMetafieldsGlobalTitleTag("Some Metafields Global Title Tag")
 				.withProductType("Shoes").withBodyHtml("Some Description")
 				.withMetafieldsGlobalDescriptionTag("Some Metafields Tag").withVendor("Some Vendor")
 				.withTags(Collections.emptySet()).withSortedOptionNames(Collections.emptyList())
 				.withImageSources(Arrays.asList("http://channelape.com/1.png", "http://channelape.com/2.png"))
-				.withVariantCreationRequests(Arrays.asList(shopifyVariantCreationRequest)).withPublished(true).build();
+				.withVariantCreationRequests(Arrays.asList(shopifyVariantCreationRequest)).withPublished(true)
+				.noTemplateSuffix()
+				.withWebPublishedScope()
+				.withHandle("custome-handle")
+				.build();
 
 		final ShopifyProduct actualShopifyProduct = shopifySdk.createProduct(shopifyProductCreationRequest);
 

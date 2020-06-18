@@ -2,6 +2,7 @@ package com.shopify.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 public class ShopifyVariantCreationRequest implements ShopifyVariantRequest {
 
@@ -27,7 +28,8 @@ public class ShopifyVariantCreationRequest implements ShopifyVariantRequest {
 	}
 
 	public static interface WeightStep {
-		public AvailableStep withWeight(final BigDecimal weight);
+		public AvailableStep withWeightGrams(final BigDecimal weightGrams);
+		public AvailableStep withWeightCustom(final String weight, final String unit);
 	}
 
 	public static interface AvailableStep {
@@ -77,16 +79,39 @@ public class ShopifyVariantCreationRequest implements ShopifyVariantRequest {
 	}
 
 	public static interface RequiresShippingStep {
-		public TaxableStep withRequiresShipping(final boolean requiresShipping);
+		public TitleStep withRequiresShipping(final boolean requiresShipping);
 
-		public TaxableStep withRequiresShippingDefault();
+		public TitleStep withRequiresShippingDefault();
+	}
+
+	public static interface TitleStep {
+		public TaxableStep withTitle(final String title);
+		public TaxableStep withTitleDefault();
 	}
 
 	public static interface TaxableStep {
-		public BuildStep withTaxable(final boolean taxable);
+		public InventoryPresentmentStep withTaxable(final boolean taxable);
 
-		public BuildStep withTaxableDefault();
+		public InventoryPresentmentStep withTaxableDefault();
 	}
+
+	public static interface InventoryPresentmentStep {
+		public ProductIdStep withInventoryPresentment(final List<ShopifyVariantPresentmentPrice> presentmentPrices);
+
+		public ProductIdStep withDefaultInventoryPresentment(String amount, String compareAtPrice);
+	}
+	public static interface ProductIdStep {
+		public IdStep withProductId(String productId);
+
+		public IdStep noProductId();
+	}
+	public static interface IdStep {
+		public BuildStep withId(String productId);
+
+		public BuildStep noId();
+	}
+
+
 
 	public static interface BuildStep {
 		public ShopifyVariantCreationRequest build();
@@ -121,8 +146,9 @@ public class ShopifyVariantCreationRequest implements ShopifyVariantRequest {
 		this.imageSource = imageSource;
 	}
 
-	private static class Steps implements PriceStep, CompareAtPriceStep, SkuStep, BarcodeStep, WeightStep,
+	private static class Steps implements PriceStep, TitleStep, CompareAtPriceStep, SkuStep, BarcodeStep, WeightStep,
 			AvailableStep, FirstOptionStep, SecondOptionStep, ThirdOptionStep, ImageSourceStep, InventoryManagementStep,
+			InventoryPresentmentStep, ProductIdStep, IdStep,
 			InventoryPolicyStep, FulfillmentServiceStep, RequiresShippingStep, TaxableStep, BuildStep {
 		private static final String DEFAULT_INVENTORY_MANAGEMENT = "shopify";
 		private static final InventoryPolicy DEFAULT_INVENTORY_POLICY = InventoryPolicy.DENY;
@@ -174,14 +200,21 @@ public class ShopifyVariantCreationRequest implements ShopifyVariantRequest {
 
 		@Override
 		public FirstOptionStep withAvailable(final long available) {
+			shopifyVariant.setInventoryQuantity(available);
 			shopifyVariant.setAvailable(available);
 			return this;
 		}
 
 		@Override
-		public AvailableStep withWeight(final BigDecimal weight) {
-			final long grams = weight.setScale(ZERO, RoundingMode.HALF_UP).longValueExact();
+		public AvailableStep withWeightGrams(final BigDecimal weightGrams) {
+			final long grams = weightGrams.setScale(ZERO, RoundingMode.HALF_UP).longValueExact();
 			shopifyVariant.setGrams(grams);
+			return this;
+		}
+		@Override
+		public AvailableStep withWeightCustom(final String weight, final String unit) {
+			shopifyVariant.setWeight(weight);
+			shopifyVariant.setWeightUnit(unit);
 			return this;
 		}
 
@@ -226,25 +259,37 @@ public class ShopifyVariantCreationRequest implements ShopifyVariantRequest {
 		}
 
 		@Override
-		public BuildStep withTaxable(final boolean taxable) {
+		public InventoryPresentmentStep withTaxable(final boolean taxable) {
 			shopifyVariant.setTaxable(taxable);
 			return this;
 		}
 
 		@Override
-		public BuildStep withTaxableDefault() {
+		public InventoryPresentmentStep withTaxableDefault() {
 			shopifyVariant.setTaxable(TAXABLE_DEFAULT);
 			return this;
 		}
 
 		@Override
-		public TaxableStep withRequiresShipping(final boolean requiresShipping) {
+		public TaxableStep withTitle(String title) {
+			shopifyVariant.setTitle(title);
+			return this;
+		}
+
+		@Override
+		public TaxableStep withTitleDefault() {
+			shopifyVariant.setTitle("Default title");
+			return this;
+		}
+
+		@Override
+		public TitleStep withRequiresShipping(final boolean requiresShipping) {
 			shopifyVariant.setRequiresShipping(requiresShipping);
 			return this;
 		}
 
 		@Override
-		public TaxableStep withRequiresShippingDefault() {
+		public TitleStep withRequiresShippingDefault() {
 			shopifyVariant.setRequiresShipping(REQUIRES_SHIPPING_DEFAULT);
 			return this;
 		}
@@ -282,6 +327,41 @@ public class ShopifyVariantCreationRequest implements ShopifyVariantRequest {
 		@Override
 		public InventoryPolicyStep withDefaultInventoryManagement() {
 			shopifyVariant.setInventoryManagement(DEFAULT_INVENTORY_MANAGEMENT);
+			return this;
+		}
+
+		@Override
+		public BuildStep withId(String id) {
+			shopifyVariant.setId(id);
+			return this;
+		}
+
+		@Override
+		public BuildStep noId() {
+			return this;
+		}
+
+		@Override
+		public IdStep withProductId(String productId) {
+			shopifyVariant.setProductId(productId);
+			return this;
+		}
+
+		@Override
+		public IdStep noProductId() {
+			return this;
+		}
+
+
+		@Override
+		public ProductIdStep withInventoryPresentment(List<ShopifyVariantPresentmentPrice> presentmentPrices) {
+			shopifyVariant.setPresentmentPrices(presentmentPrices);
+			return this;
+		}
+
+		@Override
+		public ProductIdStep withDefaultInventoryPresentment(String amount, String compareAtPrice) {
+			shopifyVariant.setPresentmentPrices(ShopifyVariantPresentmentPrice.defaultPresentment(amount, compareAtPrice));
 			return this;
 		}
 	}

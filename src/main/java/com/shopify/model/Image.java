@@ -9,10 +9,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.shopify.model.adapters.EscapedStringAdapter;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Image {
 
 	private String id;
@@ -83,4 +85,16 @@ public class Image {
 		this.metafields = metafields;
 	}
 
+	@Override
+	public String toString() {
+		return "Image{" +
+				"id='" + id + '\'' +
+				", productId='" + productId + '\'' +
+				", name='" + name + '\'' +
+				", position=" + position +
+				", source='" + source + '\'' +
+				", variantIds=" + variantIds +
+				", metafields=" + metafields +
+				'}';
+	}
 }

@@ -89,10 +89,14 @@ public class ShopifyVariantRequestOption1ComparatorTest {
 
 	public ShopifyVariantCreationRequest buildShopifyVariantRequest(final String firstOption) {
 		return ShopifyVariantCreationRequest.newBuilder().withPrice(BigDecimal.TEN).withCompareAtPrice(BigDecimal.ONE)
-				.withSku("1").withBarcode("11").withWeight(BigDecimal.ZERO).withAvailable(4)
+				.withSku("1").withBarcode("11").withWeightGrams(BigDecimal.ZERO).withAvailable(4)
 				.withFirstOption(firstOption).noSecondOption().noThirdOption().noImageSource()
 				.withDefaultInventoryManagement().withDefaultInventoryPolicy().withDefaultFulfillmentService()
-				.withRequiresShippingDefault().withTaxableDefault().build();
+				.withRequiresShippingDefault()
+				.withTitleDefault()
+				.withTaxableDefault()
+				.withDefaultInventoryPresentment("10", "25")
+				.noProductId().noId().build();
 	}
 
 }
