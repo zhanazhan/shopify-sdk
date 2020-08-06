@@ -1,8 +1,11 @@
 package com.shopify.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Arrays;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ImageAltTextCreationRequest {
 
 	static final String KEY = "alt";

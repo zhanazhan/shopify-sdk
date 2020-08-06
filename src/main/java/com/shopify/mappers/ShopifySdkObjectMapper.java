@@ -16,13 +16,13 @@ public class ShopifySdkObjectMapper {
 
 	public static ObjectMapper buildMapper() {
 		final ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
 		final AnnotationIntrospector pair = AnnotationIntrospector.pair(
 				new JaxbAnnotationIntrospector(TypeFactory.defaultInstance()), new JacksonAnnotationIntrospector());
 		mapper.setAnnotationIntrospector(pair);
-
 		mapper.enable(MapperFeature.USE_ANNOTATIONS);
 		return mapper;
 	}

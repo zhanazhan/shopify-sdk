@@ -2,8 +2,10 @@ package com.shopify.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.joda.time.DateTime;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ShopifyOrderCreationRequest {
 
 	private final ShopifyOrder request;

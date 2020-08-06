@@ -11,11 +11,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ShopifyProductUpdateRequest implements ShopifyProductRequest {
 
 	private final ShopifyProduct request;
