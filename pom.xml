@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.channelape</groupId>
 	<artifactId>shopify-sdk</artifactId>
-	<version>2.0.0</version>
+	<version>2.0.0-a2-v1</version>
 
 	<name>Shopify SDK</name>
 	<description>Java SDK for Shopify REST API.</description>
@@ -32,6 +32,11 @@
 			<name>Ryan Kazokas</name>
 			<email>rkazokas@channelape.com</email>
 			<organizationUrl>https://channelape.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Zhandos Ospanov</name>
+			<email>zhanazhan@gmail.com</email>
+			<organizationUrl>https://ecomwizz.com</organizationUrl>
 		</developer>
 	</developers>
 
@@ -61,6 +66,7 @@
 		<jersey.version>2.25.1</jersey.version>
 		<pitest.version>1.4.3</pitest.version>
 		<jacoco.version>0.8.2</jacoco.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
@@ -169,79 +175,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.pitest</groupId>
-				<artifactId>pitest-maven</artifactId>
-				<version>${pitest.version}</version>
-				<executions>
-					<execution>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>mutationCoverage</goal>
-						</goals>
-						<configuration>
-							<mutationThreshold>87</mutationThreshold>
-							<threads>10</threads>
-							<targetClasses>
-								<param>com.shopify.*</param>
-							</targetClasses>
-							<targetTests>
-								<param>com.shopify.*Test</param>
-							</targetTests>
-							<outputFormats>
-								<outputFormat>HTML</outputFormat>
-								<outputFormat>XML</outputFormat>
-							</outputFormats>
-							<timeoutConstant>2000</timeoutConstant>
-							<historyInputFile>src/test/resources/pitestHistory</historyInputFile>
-							<historyOutputFile>src/test/resources/pitestHistory</historyOutputFile>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco.version}</version>
-				<executions>
-					<execution>
-						<id>default-prepare-agent</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>default-prepare-agent-integration</id>
-						<goals>
-							<goal>prepare-agent-integration</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>default-report</id>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>default-report-integration</id>
-						<goals>
-							<goal>report-integration</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
@@ -262,85 +195,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<additionalparam>-Xdoclint:none</additionalparam>
-					<source>8</source>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>release</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.6.7</version>
-						<extensions>true</extensions>
-						<configuration>
-							<serverId>ossrh</serverId>
-							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>true</autoReleaseAfterClose>
-						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar-no-fork</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<configuration>
-							<additionalparam>-Xdoclint:none</additionalparam>
-						</configuration>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.6</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
 </project>

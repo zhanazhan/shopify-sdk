@@ -29,11 +29,11 @@ public class ShopifyVariantCreationRequestTest {
 	public void givenValuesSetAndNoCompareAtPriceAndNoImageSourceAndDefaultInventoryPolicyAndDefaultFulfillmentSErviceAndDefaultInventoryManagementAndDefaultRequiresShippingAndDefaultTaxableWhenBuildingShopifyVariantCreationRequestThenExpectCorrectValues() {
 		final ShopifyVariantCreationRequest actualShopifyVariantCreationRequest = ShopifyVariantCreationRequest
 				.newBuilder().withPrice(SOME_PRICE_AMOUNT).noCompareAtPrice().withSku(SOME_SKU)
-				.withBarcode(SOME_BARCODE).withWeight(SOME_GRAMS_AMOUNT).withAvailable(SOME_QUANTITY)
+				.withBarcode(SOME_BARCODE).withWeightGrams(SOME_GRAMS_AMOUNT).withAvailable(SOME_QUANTITY)
 				.withFirstOption(SOME_FIRST_OPTION).withSecondOption(SOME_SECOND_OPTION)
 				.withThirdOption(SOME_THIRD_OPTION).noImageSource().withDefaultInventoryManagement()
 				.withDefaultInventoryPolicy().withDefaultFulfillmentService().withRequiresShippingDefault()
-				.withTaxableDefault().build();
+				.withTitleDefault().withTaxableDefault().withDefaultInventoryPresentment("43", "45").noProductId().noId().build();
 
 		assertTrue(actualShopifyVariantCreationRequest.hasChanged());
 		assertNull(actualShopifyVariantCreationRequest.getImageSource());
@@ -58,12 +58,12 @@ public class ShopifyVariantCreationRequestTest {
 	public void givenValuesSetWhenBuildingShopifyVariantCreationRequestThenExpectCorrectValues() {
 		final ShopifyVariantCreationRequest actualShopifyVariantCreationRequest = ShopifyVariantCreationRequest
 				.newBuilder().withPrice(SOME_PRICE_AMOUNT).withCompareAtPrice(SOME_COMPARE_AT_PRICE_AMOUNT)
-				.withSku(SOME_SKU).withBarcode(SOME_BARCODE).withWeight(SOME_GRAMS_AMOUNT).withAvailable(SOME_QUANTITY)
+				.withSku(SOME_SKU).withBarcode(SOME_BARCODE).withWeightGrams(SOME_GRAMS_AMOUNT).withAvailable(SOME_QUANTITY)
 				.withFirstOption(SOME_FIRST_OPTION).withSecondOption(SOME_SECOND_OPTION)
 				.withThirdOption(SOME_THIRD_OPTION).withImageSource(SOME_IMAGE_SOURCE)
 				.withInventoryManagement(SOME_INVENTORY_MANAGEMENT).withInventoryPolicy(SOME_INVENTORY_POLICY)
-				.withFulfillmentService(SOME_FULFILLMENT_SERVICE).withRequiresShipping(false).withTaxable(false)
-				.build();
+				.withFulfillmentService(SOME_FULFILLMENT_SERVICE).withRequiresShipping(false).withTitleDefault().withTaxable(false)
+				.withDefaultInventoryPresentment("43", "45").noProductId().noId().build();
 
 		assertEquals(SOME_IMAGE_SOURCE, actualShopifyVariantCreationRequest.getImageSource());
 		assertTrue(actualShopifyVariantCreationRequest.hasChanged());

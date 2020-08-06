@@ -58,7 +58,20 @@ public class ShopifyProductCreationRequest implements ShopifyProductRequest {
 	}
 
 	public static interface PublishedStep {
-		public BuildStep withPublished(final boolean published);
+		public TemplateSuffixStep withPublished(final boolean published);
+	}
+	public static interface TemplateSuffixStep {
+		public PublishedScopeStep withTemplateSuffix(final String templateSuffix);
+		public PublishedScopeStep noTemplateSuffix();
+	}
+	public static interface PublishedScopeStep {
+		public HandleStep withGlobalPublishedScope();
+		public HandleStep withWebPublishedScope();
+		public HandleStep noPublishedScope();
+	}
+	public static interface HandleStep {
+		public BuildStep withHandle(final String handle);
+		public BuildStep noHandle();
 	}
 
 	public static interface BuildStep {
@@ -97,6 +110,7 @@ public class ShopifyProductCreationRequest implements ShopifyProductRequest {
 
 	private static class Steps implements TitleStep, MetafieldsGlobalTitleTagStep, MetafieldsGlobalDescriptionTagStep,
 			ProductTypeStep, BodyHtmlStep, VendorStep, TagsStep, SortedOptionNamesStep, ImageSourcesStep,
+			TemplateSuffixStep, PublishedScopeStep, HandleStep,
 			VariantCreationRequestsStep, PublishedStep, BuildStep {
 
 		private final ShopifyProduct shopifyProduct = new ShopifyProduct();
@@ -124,8 +138,8 @@ public class ShopifyProductCreationRequest implements ShopifyProductRequest {
 					final String imageSource = shopifyVariantCreationRequest.getImageSource();
 					shopifyProduct.getImages().stream().filter(image -> image.getSource().equals(imageSource))
 							.findFirst().ifPresent(image -> {
-								variantPositionToImagePosition.put(position, image.getPosition());
-							});
+						variantPositionToImagePosition.put(position, image.getPosition());
+					});
 				}
 				shopifyVariants.add(shopifyVariant);
 			}
@@ -211,11 +225,49 @@ public class ShopifyProductCreationRequest implements ShopifyProductRequest {
 		}
 
 		@Override
-		public BuildStep withPublished(final boolean published) {
+		public TemplateSuffixStep withPublished(final boolean published) {
 			final String publishedAt = published ? DateTime.now(DateTimeZone.UTC).toString() : null;
 			shopifyProduct.setPublishedAt(publishedAt);
 			return this;
 		}
 
+		@Override
+		public PublishedScopeStep withTemplateSuffix(final String templateSuffix) {
+			shopifyProduct.setTemplateSuffix(templateSuffix);
+			return this;
+		}
+
+		@Override
+		public PublishedScopeStep noTemplateSuffix() {
+			return this;
+		}
+
+		@Override
+		public HandleStep withGlobalPublishedScope() {
+			shopifyProduct.setPublishedScope("global");
+			return this;
+		}
+
+		@Override
+		public HandleStep withWebPublishedScope() {
+			shopifyProduct.setPublishedScope("web");
+			return this;
+		}
+
+		@Override
+		public HandleStep noPublishedScope() {
+			return this;
+		}
+
+		@Override
+		public BuildStep withHandle(String handle) {
+			shopifyProduct.setHandle(handle);
+			return this;
+		}
+
+		@Override
+		public BuildStep noHandle() {
+			return this;
+		}
 	}
 }

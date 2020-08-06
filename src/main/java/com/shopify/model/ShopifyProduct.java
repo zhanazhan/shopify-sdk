@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.StringUtils;
 
 import com.shopify.model.adapters.EscapedStringAdapter;
@@ -20,6 +21,7 @@ import com.shopify.model.adapters.TagsAdapter;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ShopifyProduct {
 
 	private String id;
@@ -45,6 +47,16 @@ public class ShopifyProduct {
 	private List<ShopifyVariant> variants = new LinkedList<>();
 	@XmlElement(name = "published_at")
 	private String publishedAt;
+	@XmlElement(name = "created_at")
+	private String createdAt;
+	@XmlElement(name = "published_scope")
+	@XmlJavaTypeAdapter(EscapedStringAdapter.class)
+	private String publishedScope;
+	@XmlElement(name = "template_suffix")
+	@XmlJavaTypeAdapter(EscapedStringAdapter.class)
+	private String templateSuffix;
+	@XmlJavaTypeAdapter(EscapedStringAdapter.class)
+	private String handle;
 	private Boolean published;
 
 	public String getId() {
@@ -167,5 +179,57 @@ public class ShopifyProduct {
 			}
 		};
 		return options.stream().sorted(optionPositionCompartor).map(Option::getName).collect(Collectors.toList());
+	}
+
+	@Override
+	public String toString() {
+		return "ShopifyProduct{" +
+				"id='" + id + '\'' +
+				", title='" + title + '\'' +
+				", productType='" + productType + '\'' +
+				", bodyHtml='" + bodyHtml + '\'' +
+				", vendor='" + vendor + '\'' +
+				", tags=" + tags +
+				", options=" + options +
+				", metafieldsGlobalTitleTag='" + metafieldsGlobalTitleTag + '\'' +
+				", metafieldsGlobalDescriptionTag='" + metafieldsGlobalDescriptionTag + '\'' +
+				", images=" + images +
+				", image=" + image +
+				", variants=" + variants +
+				", publishedAt='" + publishedAt + '\'' +
+				", published=" + published +
+				'}';
+	}
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public String getHandle() {
+		return handle;
+	}
+
+	public void setHandle(String handle) {
+		this.handle = handle;
+	}
+
+	public String getPublishedScope() {
+		return publishedScope;
+	}
+
+	public void setPublishedScope(String publishedScope) {
+		this.publishedScope = publishedScope;
+	}
+
+	public String getTemplateSuffix() {
+		return templateSuffix;
+	}
+
+	public void setTemplateSuffix(String templateSuffix) {
+		this.templateSuffix = templateSuffix;
 	}
 }
